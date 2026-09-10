@@ -1,0 +1,2 @@
+# Ginfinity
+gestionale gnfinity
