@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1B1712">
+  <meta name="theme-color" content="#FFFFFF">
   <meta name="description" content="Gestionale Distillati - Catalogo, scontistiche e listini">
   <title>Gestionale Distillati</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23A8672D' width='180' height='180'/><text x='50%' y='50%' font-size='90' font-weight='700' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>D</text></svg>">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+    /* Spacing scale: 8px base grid, kept consistent with the landing page. */
     * { box-sizing: border-box; }
     body {
-      background: #1B1712;
-      color: #EFE7D8;
-      font-family: 'Work Sans', sans-serif;
+      background: #FFFFFF;
+      color: #1D1D1F;
+      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
       -webkit-font-smoothing: antialiased;
@@ -25,23 +26,21 @@
       max-width: 980px;
       margin: 0 auto;
       min-height: 100vh;
-      background: #1B1712;
-      border-radius: 14px;
+      background: #FFFFFF;
     }
 
     .dz-header {
-      padding: 28px 32px;
-      border-bottom: 1px solid #40331F;
+      padding: 32px;
+      border-bottom: 1px solid #D2D2D7;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      background: linear-gradient(180deg, rgba(193,133,46,0.06), transparent);
     }
 
-    .dz-brand h1 { font-family: 'Fraunces', serif; font-size: 26px; margin: 0; }
-    .dz-brand p { margin: 6px 0 0; color: #A99C86; font-size: 13.5px; }
+    .dz-brand h1 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 26px; letter-spacing: -0.01em; margin: 0; }
+    .dz-brand p { margin: 6px 0 0; color: #6E6E73; font-size: 13.5px; }
 
     .dz-user-info {
       font-size: 14px;
@@ -50,8 +49,8 @@
       gap: 12px;
     }
     .dz-user-badge {
-      background: rgba(193, 133, 46, 0.2);
-      color: #C1852E;
+      background: rgba(168, 103, 45, 0.1);
+      color: #A8672D;
       padding: 4px 12px;
       border-radius: 999px;
       font-size: 12px;
@@ -59,16 +58,16 @@
     }
     .dz-logout-btn {
       background: none;
-      border: 1px solid #40331F;
-      color: #A99C86;
+      border: 1px solid #D2D2D7;
+      color: #6E6E73;
       padding: 8px 14px;
-      border-radius: 8px;
+      border-radius: 980px;
       cursor: pointer;
-      font-family: 'Work Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 13.5px;
       font-weight: 600;
     }
-    .dz-logout-btn:hover { color: #EFE7D8; border-color: #C1852E; }
+    .dz-logout-btn:hover { color: #1D1D1F; border-color: #A8672D; }
 
     .dz-login-screen {
       display: flex;
@@ -78,17 +77,18 @@
       min-height: 100vh;
       padding: 40px 20px;
       text-align: center;
+      background: #FFFFFF;
     }
     .dz-login-card {
-      background: #241D15;
-      border: 1px solid #40331F;
-      border-radius: 14px;
+      background: #FFFFFF;
+      border: 1px solid #D2D2D7;
+      border-radius: 18px;
       padding: 40px 32px;
       max-width: 380px;
       width: 100%;
     }
-    .dz-login-card h1 { font-family: 'Fraunces', serif; font-size: 32px; margin: 0 0 12px 0; }
-    .dz-login-card p { color: #A99C86; margin: 0 0 32px 0; font-size: 15px; }
+    .dz-login-card h1 { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.01em; font-size: 32px; margin: 0 0 12px 0; }
+    .dz-login-card p { color: #6E6E73; margin: 0 0 32px 0; font-size: 15px; }
 
     .dz-login-field {
       display: flex;
@@ -97,48 +97,48 @@
       margin-bottom: 24px;
       text-align: left;
     }
-    .dz-login-field label { font-size: 13px; color: #A99C86; font-weight: 600; }
+    .dz-login-field label { font-size: 13px; color: #6E6E73; font-weight: 600; }
     .dz-login-field input {
-      background: #2E2617;
-      border: 1px solid #40331F;
-      color: #EFE7D8;
-      border-radius: 8px;
+      background: #F5F5F7;
+      border: 1px solid #D2D2D7;
+      color: #1D1D1F;
+      border-radius: 10px;
       padding: 11px 13px;
-      font-family: 'Work Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
     }
     .dz-login-field input:focus {
-      outline: 1.5px solid #C1852E;
-      border-color: #C1852E;
+      outline: 1.5px solid #A8672D;
+      border-color: #A8672D;
     }
 
     .dz-login-btn {
       width: 100%;
-      background: #C1852E;
-      color: #241A0E;
+      background: #1D1D1F;
+      color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 12px;
-      font-family: 'Work Sans', sans-serif;
+      border-radius: 980px;
+      padding: 13px;
+      font-family: 'Inter', sans-serif;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
       margin-bottom: 16px;
     }
-    .dz-login-btn:hover { filter: brightness(1.05); }
+    .dz-login-btn:hover { filter: brightness(1.2); }
     .dz-login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .dz-login-tabs {
       display: flex;
       gap: 8px;
       margin-bottom: 32px;
-      border-bottom: 1px solid #40331F;
+      border-bottom: 1px solid #D2D2D7;
     }
     .dz-login-tab {
       background: none;
       border: none;
-      color: #A99C86;
-      font-family: 'Work Sans', sans-serif;
+      color: #6E6E73;
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
       font-weight: 600;
       padding: 10px 4px;
@@ -146,110 +146,110 @@
       border-bottom: 2px solid transparent;
       margin-bottom: -1px;
     }
-    .dz-login-tab.active { color: #C1852E; border-bottom-color: #C1852E; }
+    .dz-login-tab.active { color: #A8672D; border-bottom-color: #A8672D; }
 
     .dz-error, .dz-success {
       padding: 12px 14px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 13.5px;
       margin-bottom: 16px;
     }
     .dz-error {
-      background: rgba(181, 83, 63, 0.14);
-      color: #E8B4A8;
-      border: 1px solid rgba(181, 83, 63, 0.3);
+      background: rgba(181, 83, 63, 0.08);
+      color: #A8402C;
+      border: 1px solid rgba(181, 83, 63, 0.25);
     }
     .dz-success {
-      background: rgba(107, 122, 84, 0.16);
-      color: #B8D4A8;
-      border: 1px solid rgba(107, 122, 84, 0.3);
+      background: rgba(107, 122, 84, 0.08);
+      color: #4F6238;
+      border: 1px solid rgba(107, 122, 84, 0.25);
     }
 
     .dz-body { padding: 26px 32px 34px; }
-    .dz-tabs { display: flex; gap: 6px; margin-bottom: 22px; border-bottom: 1px solid #40331F; }
+    .dz-tabs { display: flex; gap: 6px; margin-bottom: 22px; border-bottom: 1px solid #D2D2D7; }
     .dz-tab {
-      background: none; border: none; color: #A99C86;
-      font-family: 'Work Sans', sans-serif; font-size: 14px; font-weight: 600;
+      background: none; border: none; color: #6E6E73;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
       padding: 10px 4px; margin-right: 22px; cursor: pointer;
       border-bottom: 2px solid transparent; margin-bottom: -1px;
     }
-    .dz-tab.active { color: #C1852E; border-bottom-color: #C1852E; }
+    .dz-tab.active { color: #A8672D; border-bottom-color: #A8672D; }
 
     .dz-panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .dz-panel-title h2 { font-family: 'Fraunces', serif; font-size: 19px; margin: 0; }
+    .dz-panel-title h2 { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.01em; font-size: 19px; margin: 0; }
 
     .dz-btn {
-      font-family: 'Work Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-weight: 600;
       font-size: 13.5px;
-      border-radius: 8px;
+      border-radius: 980px;
       padding: 9px 16px;
       cursor: pointer;
-      border: 1px solid #40331F;
-      background: #2E2617;
-      color: #EFE7D8;
+      border: 1px solid #D2D2D7;
+      background: #F5F5F7;
+      color: #1D1D1F;
       transition: border-color 0.15s ease;
     }
-    .dz-btn:hover { border-color: #8A6226; }
-    .dz-btn-primary { background: #C1852E; color: #241A0E; border-color: #C1852E; }
-    .dz-btn-primary:hover { filter: brightness(1.05); }
+    .dz-btn:hover { border-color: #A8672D; }
+    .dz-btn-primary { background: #1D1D1F; color: #fff; border-color: #1D1D1F; }
+    .dz-btn-primary:hover { filter: brightness(1.3); }
     .dz-btn-ghost { background: none; border-color: transparent; padding: 6px 10px; }
     .dz-btn-danger { color: #B5533F; }
 
     table.dz-table { width: 100%; border-collapse: collapse; }
     .dz-table th {
-      text-align: left; font-size: 11.5px; color: #A99C86; font-weight: 600;
-      padding: 0 12px 10px; border-bottom: 1px solid #40331F;
+      text-align: left; font-size: 11.5px; color: #6E6E73; font-weight: 600;
+      padding: 0 12px 10px; border-bottom: 1px solid #D2D2D7;
     }
-    .dz-table td { padding: 12px; border-bottom: 1px solid #40331F; font-size: 14px; }
+    .dz-table td { padding: 12px; border-bottom: 1px solid #D2D2D7; font-size: 14px; }
     .dz-table input, .dz-table select {
-      background: #2E2617; border: 1px solid #40331F; color: #EFE7D8;
+      background: #F5F5F7; border: 1px solid #D2D2D7; color: #1D1D1F;
       border-radius: 6px; padding: 6px 8px; font-size: 13.5px; width: 100%;
-      font-family: 'Work Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     .dz-card {
-      background: #241D15; border: 1px solid #40331F; border-radius: 12px;
+      background: #F5F5F7; border: 1px solid #D2D2D7; border-radius: 14px;
       padding: 18px 20px; margin-bottom: 18px;
     }
 
     .dz-form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .dz-field { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 120px; }
-    .dz-field label { font-size: 12px; color: #A99C86; font-weight: 600; }
+    .dz-field label { font-size: 12px; color: #6E6E73; font-weight: 600; }
     .dz-field input, .dz-field select {
-      background: #2E2617; border: 1px solid #40331F; color: #EFE7D8;
-      border-radius: 8px; padding: 9px 11px; font-size: 14px; font-family: 'Work Sans', sans-serif;
+      background: #FFFFFF; border: 1px solid #D2D2D7; color: #1D1D1F;
+      border-radius: 10px; padding: 9px 11px; font-size: 14px; font-family: 'Inter', sans-serif;
     }
-    .dz-field input:focus, .dz-field select:focus { outline: 1.5px solid #C1852E; border-color: #C1852E; }
+    .dz-field input:focus, .dz-field select:focus { outline: 1.5px solid #A8672D; border-color: #A8672D; }
 
-    .dz-tag { display: inline-block; background: rgba(193, 133, 46, 0.14); color: #C1852E;
+    .dz-tag { display: inline-block; background: rgba(168, 103, 45, 0.1); color: #A8672D;
       border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 600; }
 
     .dz-price { font-variant-numeric: tabular-nums; font-weight: 600; }
 
-    .dz-empty { text-align: center; padding: 40px 20px; color: #A99C86; }
+    .dz-empty { text-align: center; padding: 40px 20px; color: #6E6E73; }
 
     .dz-rep-select { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
     .dz-rep-select select { min-width: 220px; }
 
     .dz-qty-input {
-      width: 56px; text-align: center; background: #2E2617;
-      border: 1px solid #40331F; color: #EFE7D8; border-radius: 6px; padding: 6px;
-      font-family: 'Work Sans', sans-serif; font-size: 13.5px;
+      width: 56px; text-align: center; background: #FFFFFF;
+      border: 1px solid #D2D2D7; color: #1D1D1F; border-radius: 6px; padding: 6px;
+      font-family: 'Inter', sans-serif; font-size: 13.5px;
     }
 
     .dz-quote-bar {
-      margin-top: 20px; background: #2E2617; border: 1px solid #40331F; border-radius: 12px;
+      margin-top: 20px; background: #F5F5F7; border: 1px solid #D2D2D7; border-radius: 14px;
       padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
       flex-wrap: wrap; gap: 12px;
     }
-    .dz-quote-total { font-family: 'Fraunces', serif; font-size: 22px; color: #C1852E; }
-    .dz-quote-total span { font-size: 12.5px; color: #A99C86; font-family: 'Work Sans', sans-serif; display: block; }
+    .dz-quote-total { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.01em; font-size: 22px; color: #A8672D; }
+    .dz-quote-total span { font-size: 12.5px; color: #6E6E73; font-family: 'Inter', sans-serif; font-weight: 400; display: block; }
 
-    .dz-loading { text-align: center; padding: 40px 20px; color: #A99C86; }
+    .dz-loading { text-align: center; padding: 40px 20px; color: #6E6E73; }
     .dz-spinner {
       display: inline-block; width: 24px; height: 24px;
-      border: 2px solid #40331F; border-top-color: #C1852E;
+      border: 2px solid #D2D2D7; border-top-color: #A8672D;
       border-radius: 50%; animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -279,8 +279,8 @@
 
   // Password di accesso (semplici, condivise)
   const PASSWORDS = {
-    direzione: 'direzione123',
-    rappresentante: 'rappresentante123'
+    direzione: 'federico94!',
+    rappresentante: 'ignaziobillera?!'
   };
 
   const state = {
@@ -451,9 +451,6 @@
             <input id="dz-password-input" type="password" placeholder="Inserisci la password">
           </div>
           <button class="dz-login-btn" id="dz-login-submit">Accedi</button>
-          <div style="font-size: 12px; color: #A99C86; margin-top: 24px; text-align: center;">
-            <strong>Demo:</strong><br>Direzione: direzione123<br>Rappresentante: rappresentante123
-          </div>
         </div>
       </div>
     `;
