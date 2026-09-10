@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1B1712">
+  <meta name="description" content="Gestionale Distillati - Catalogo, scontistiche e listini">
+  <title>Gestionale Distillati</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23A8672D' width='180' height='180'/><text x='50%' y='50%' font-size='90' font-weight='700' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>D</text></svg>">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+    * { box-sizing: border-box; }
+    body {
+      background: #1B1712;
+      color: #EFE7D8;
+      font-family: 'Work Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #distillati-root {
+      max-width: 980px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #1B1712;
+      border-radius: 14px;
+    }
+
+    .dz-header {
+      padding: 28px 32px;
+      border-bottom: 1px solid #40331F;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(193,133,46,0.06), transparent);
+    }
+
+    .dz-brand h1 { font-family: 'Fraunces', serif; font-size: 26px; margin: 0; }
+    .dz-brand p { margin: 6px 0 0; color: #A99C86; font-size: 13.5px; }
+
+    .dz-user-info {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dz-user-badge {
+      background: rgba(193, 133, 46, 0.2);
+      color: #C1852E;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .dz-logout-btn {
+      background: none;
+      border: 1px solid #40331F;
+      color: #A99C86;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .dz-logout-btn:hover { color: #EFE7D8; border-color: #C1852E; }
+
+    .dz-login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .dz-login-card {
+      background: #241D15;
+      border: 1px solid #40331F;
+      border-radius: 14px;
+      padding: 40px 32px;
+      max-width: 380px;
+      width: 100%;
+    }
+    .dz-login-card h1 { font-family: 'Fraunces', serif; font-size: 32px; margin: 0 0 12px 0; }
+    .dz-login-card p { color: #A99C86; margin: 0 0 32px 0; font-size: 15px; }
+
+    .dz-login-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .dz-login-field label { font-size: 13px; color: #A99C86; font-weight: 600; }
+    .dz-login-field input {
+      background: #2E2617;
+      border: 1px solid #40331F;
+      color: #EFE7D8;
+      border-radius: 8px;
+      padding: 11px 13px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 14px;
+    }
+    .dz-login-field input:focus {
+      outline: 1.5px solid #C1852E;
+      border-color: #C1852E;
+    }
+
+    .dz-login-btn {
+      width: 100%;
+      background: #C1852E;
+      color: #241A0E;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .dz-login-btn:hover { filter: brightness(1.05); }
+    .dz-login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .dz-login-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid #40331F;
+    }
+    .dz-login-tab {
+      background: none;
+      border: none;
+      color: #A99C86;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 4px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .dz-login-tab.active { color: #C1852E; border-bottom-color: #C1852E; }
+
+    .dz-error, .dz-success {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      margin-bottom: 16px;
+    }
+    .dz-error {
+      background: rgba(181, 83, 63, 0.14);
+      color: #E8B4A8;
+      border: 1px solid rgba(181, 83, 63, 0.3);
+    }
+    .dz-success {
+      background: rgba(107, 122, 84, 0.16);
+      color: #B8D4A8;
+      border: 1px solid rgba(107, 122, 84, 0.3);
+    }
+
+    .dz-body { padding: 26px 32px 34px; }
+    .dz-tabs { display: flex; gap: 6px; margin-bottom: 22px; border-bottom: 1px solid #40331F; }
+    .dz-tab {
+      background: none; border: none; color: #A99C86;
+      font-family: 'Work Sans', sans-serif; font-size: 14px; font-weight: 600;
+      padding: 10px 4px; margin-right: 22px; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .dz-tab.active { color: #C1852E; border-bottom-color: #C1852E; }
+
+    .dz-panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .dz-panel-title h2 { font-family: 'Fraunces', serif; font-size: 19px; margin: 0; }
+
+    .dz-btn {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 13.5px;
+      border-radius: 8px;
+      padding: 9px 16px;
+      cursor: pointer;
+      border: 1px solid #40331F;
+      background: #2E2617;
+      color: #EFE7D8;
+      transition: border-color 0.15s ease;
+    }
+    .dz-btn:hover { border-color: #8A6226; }
+    .dz-btn-primary { background: #C1852E; color: #241A0E; border-color: #C1852E; }
+    .dz-btn-primary:hover { filter: brightness(1.05); }
+    .dz-btn-ghost { background: none; border-color: transparent; padding: 6px 10px; }
+    .dz-btn-danger { color: #B5533F; }
+
+    table.dz-table { width: 100%; border-collapse: collapse; }
+    .dz-table th {
+      text-align: left; font-size: 11.5px; color: #A99C86; font-weight: 600;
+      padding: 0 12px 10px; border-bottom: 1px solid #40331F;
+    }
+    .dz-table td { padding: 12px; border-bottom: 1px solid #40331F; font-size: 14px; }
+    .dz-table input, .dz-table select {
+      background: #2E2617; border: 1px solid #40331F; color: #EFE7D8;
+      border-radius: 6px; padding: 6px 8px; font-size: 13.5px; width: 100%;
+      font-family: 'Work Sans', sans-serif;
+    }
+
+    .dz-card {
+      background: #241D15; border: 1px solid #40331F; border-radius: 12px;
+      padding: 18px 20px; margin-bottom: 18px;
+    }
+
+    .dz-form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .dz-field { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 120px; }
+    .dz-field label { font-size: 12px; color: #A99C86; font-weight: 600; }
+    .dz-field input, .dz-field select {
+      background: #2E2617; border: 1px solid #40331F; color: #EFE7D8;
+      border-radius: 8px; padding: 9px 11px; font-size: 14px; font-family: 'Work Sans', sans-serif;
+    }
+    .dz-field input:focus, .dz-field select:focus { outline: 1.5px solid #C1852E; border-color: #C1852E; }
+
+    .dz-tag { display: inline-block; background: rgba(193, 133, 46, 0.14); color: #C1852E;
+      border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 600; }
+
+    .dz-price { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+    .dz-empty { text-align: center; padding: 40px 20px; color: #A99C86; }
+
+    .dz-rep-select { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .dz-rep-select select { min-width: 220px; }
+
+    .dz-qty-input {
+      width: 56px; text-align: center; background: #2E2617;
+      border: 1px solid #40331F; color: #EFE7D8; border-radius: 6px; padding: 6px;
+      font-family: 'Work Sans', sans-serif; font-size: 13.5px;
+    }
+
+    .dz-quote-bar {
+      margin-top: 20px; background: #2E2617; border: 1px solid #40331F; border-radius: 12px;
+      padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .dz-quote-total { font-family: 'Fraunces', serif; font-size: 22px; color: #C1852E; }
+    .dz-quote-total span { font-size: 12.5px; color: #A99C86; font-family: 'Work Sans', sans-serif; display: block; }
+
+    .dz-loading { text-align: center; padding: 40px 20px; color: #A99C86; }
+    .dz-spinner {
+      display: inline-block; width: 24px; height: 24px;
+      border: 2px solid #40331F; border-top-color: #C1852E;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .dz-hidden { display: none; }
+
+    @media (max-width: 640px) {
+      .dz-header, .dz-body { padding: 18px; }
+      .dz-table th:nth-child(2), .dz-table td:nth-child(2) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="distillati-root"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.40.0/dist/module/index.js" type="module"></script>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.40.0/+esm';
+
+  // ⚠️ DA COMPILARE: Incolla qui le chiavi di Supabase che hai copiato
+  const SUPABASE_URL = 'https://ypihjuqhsnzttwlgwmyg.supabase.co'; // Sostituisci con il tuo Project URL
+  const SUPABASE_KEY = 'sb_publishable_yvlpmJ-zK22RuQXKd6eE1A_AinDqTb7'; // Sostituisci con la tua Anon Public Key
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Password di accesso (semplici, condivise)
+  const PASSWORDS = {
+    direzione: 'direzione123',
+    rappresentante: 'rappresentante123'
+  };
+
+  const state = {
+    user: null,
+    role: null,
+    direzioneTab: 'catalogo',
+    products: [],
+    reps: [],
+    selectedRepId: null,
+    quote: {},
+    quoteClient: '',
+    editingProductId: null,
+    editingRepId: null,
+    addingProduct: false,
+    addingRep: false,
+    loading: true,
+    error: null,
+    success: null
+  };
+
+  function fmt(n) {
+    return "€ " + Number(n).toFixed(2).replace(".", ",");
+  }
+
+  function showError(msg, duration = 4000) {
+    state.error = msg;
+    state.success = null;
+    render();
+    setTimeout(() => { state.error = null; render(); }, duration);
+  }
+
+  function showSuccess(msg, duration = 2000) {
+    state.success = msg;
+    state.error = null;
+    render();
+    setTimeout(() => { state.success = null; render(); }, duration);
+  }
+
+  async function handleLogin(password, role) {
+    if (!password || PASSWORDS[role] !== password) {
+      showError('Password non corretta.');
+      return;
+    }
+    state.user = `${role}_user`;
+    state.role = role;
+    state.success = `Accesso come ${role === 'direzione' ? 'Direzione' : 'Rappresentante'}.`;
+    await loadData();
+  }
+
+  async function handleLogout() {
+    state.user = null;
+    state.role = null;
+    state.products = [];
+    state.reps = [];
+    state.quote = {};
+    render();
+  }
+
+  async function loadData() {
+    state.loading = true;
+    render();
+    try {
+      const [productsRes, repsRes] = await Promise.all([
+        supabase.from('products').select('*'),
+        supabase.from('representatives').select('*')
+      ]);
+
+      if (productsRes.error) throw productsRes.error;
+      if (repsRes.error) throw repsRes.error;
+
+      state.products = productsRes.data || [];
+      state.reps = repsRes.data || [];
+      state.selectedRepId = state.reps.length ? state.reps[0].id : null;
+    } catch (err) {
+      showError(`Errore nel caricamento: ${err.message}`);
+      state.products = [];
+      state.reps = [];
+    }
+    state.loading = false;
+    render();
+  }
+
+  async function saveProduct(product) {
+    try {
+      if (product.id) {
+        const { error } = await supabase.from('products').update(product).eq('id', product.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('products').insert([product]);
+        if (error) throw error;
+      }
+      await loadData();
+      showSuccess('Prodotto salvato.');
+      state.editingProductId = null;
+      state.addingProduct = false;
+    } catch (err) {
+      showError(`Errore: ${err.message}`);
+    }
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm('Elimina questo prodotto?')) return;
+    try {
+      const { error } = await supabase.from('products').delete().eq('id', id);
+      if (error) throw error;
+      await loadData();
+      showSuccess('Prodotto eliminato.');
+    } catch (err) {
+      showError(`Errore: ${err.message}`);
+    }
+  }
+
+  async function saveRep(rep) {
+    try {
+      if (rep.id) {
+        const { error } = await supabase.from('representatives').update(rep).eq('id', rep.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('representatives').insert([rep]);
+        if (error) throw error;
+      }
+      await loadData();
+      showSuccess('Rappresentante salvato.');
+      state.editingRepId = null;
+      state.addingRep = false;
+    } catch (err) {
+      showError(`Errore: ${err.message}`);
+    }
+  }
+
+  async function deleteRep(id) {
+    if (!confirm('Elimina questo rappresentante?')) return;
+    try {
+      const { error } = await supabase.from('representatives').delete().eq('id', id);
+      if (error) throw error;
+      await loadData();
+      showSuccess('Rappresentante eliminato.');
+    } catch (err) {
+      showError(`Errore: ${err.message}`);
+    }
+  }
+
+  function render() {
+    const root = document.getElementById('distillati-root');
+    if (!state.user) {
+      root.innerHTML = renderLoginScreen();
+      attachLoginEvents();
+      return;
+    }
+    root.innerHTML = renderApp();
+    attachAppEvents();
+  }
+
+  function renderLoginScreen() {
+    return `
+      <div class="dz-login-screen">
+        <div class="dz-login-card">
+          <h1>Gestionale Distillati</h1>
+          <p>Accedi per continuare</p>
+          ${state.error ? `<div class="dz-error">${state.error}</div>` : ''}
+          ${state.success ? `<div class="dz-success">${state.success}</div>` : ''}
+          <div class="dz-login-tabs">
+            <button class="dz-login-tab active" data-login-role="direzione">Direzione</button>
+            <button class="dz-login-tab" data-login-role="rappresentante">Rappresentante</button>
+          </div>
+          <div class="dz-login-field">
+            <label>Password</label>
+            <input id="dz-password-input" type="password" placeholder="Inserisci la password">
+          </div>
+          <button class="dz-login-btn" id="dz-login-submit">Accedi</button>
+          <div style="font-size: 12px; color: #A99C86; margin-top: 24px; text-align: center;">
+            <strong>Demo:</strong><br>Direzione: direzione123<br>Rappresentante: rappresentante123
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderApp() {
+    return `
+      <div class="dz-header">
+        <div class="dz-brand">
+          <h1>Gestionale Distillati</h1>
+          <p>Listini, scontistiche e catalogo per la rete vendita</p>
+        </div>
+        <div class="dz-user-info">
+          <span class="dz-user-badge">${state.role === 'direzione' ? '👔 Direzione' : '🎯 Rappresentante'}</span>
+          <button class="dz-logout-btn" id="dz-logout">Esci</button>
+        </div>
+      </div>
+      <div class="dz-body">
+        ${state.error ? `<div class="dz-error">${state.error}</div>` : ''}
+        ${state.success ? `<div class="dz-success">${state.success}</div>` : ''}
+        ${state.loading ? `<div class="dz-loading"><div class="dz-spinner"></div><p>Caricamento...</p></div>` : (state.role === 'direzione' ? renderDirezione() : renderRappresentante())}
+      </div>
+    `;
+  }
+
+  function renderDirezione() {
+    return `
+      <div class="dz-tabs">
+        <button class="dz-tab ${state.direzioneTab === 'catalogo' ? 'active' : ''}" data-dtab="catalogo">Catalogo prodotti</button>
+        <button class="dz-tab ${state.direzioneTab === 'rappresentanti' ? 'active' : ''}" data-dtab="rappresentanti">Rappresentanti</button>
+      </div>
+      ${state.direzioneTab === 'catalogo' ? renderCatalogo() : renderRepsAdmin()}
+    `;
+  }
+
+  function renderCatalogo() {
+    const rows = state.products.map(p => {
+      if (state.editingProductId === p.id) return `
+        <tr>
+          <td><input value="${p.name}" id="ep-name-${p.id}"></td>
+          <td><select id="ep-category-${p.id}">
+            <option value="Whisky" ${p.category === 'Whisky' ? 'selected' : ''}>Whisky</option>
+            <option value="Rum" ${p.category === 'Rum' ? 'selected' : ''}>Rum</option>
+            <option value="Gin" ${p.category === 'Gin' ? 'selected' : ''}>Gin</option>
+            <option value="Vodka" ${p.category === 'Vodka' ? 'selected' : ''}>Vodka</option>
+            <option value="Amari" ${p.category === 'Amari' ? 'selected' : ''}>Amari</option>
+            <option value="Grappe" ${p.category === 'Grappe' ? 'selected' : ''}>Grappe</option>
+            <option value="Vermouth" ${p.category === 'Vermouth' ? 'selected' : ''}>Vermouth</option>
+            <option value="Liquori" ${p.category === 'Liquori' ? 'selected' : ''}>Liquori</option>
+          </select></td>
+          <td><input value="${p.unit}" id="ep-unit-${p.id}"></td>
+          <td><input type="number" step="0.01" value="${p.base_price}" id="ep-price-${p.id}"></td>
+          <td>
+            <button class="dz-btn dz-btn-primary dz-btn-sm" data-save-product="${p.id}">Salva</button>
+            <button class="dz-btn dz-btn-ghost dz-btn-sm" data-cancel-edit-product="${p.id}">Annulla</button>
+          </td>
+        </tr>`;
+      return `
+        <tr>
+          <td>${p.name}</td>
+          <td><span class="dz-tag">${p.category}</span></td>
+          <td style="color: #A99C86;">${p.unit}</td>
+          <td class="dz-price">${fmt(p.base_price)}</td>
+          <td>
+            <button class="dz-btn dz-btn-ghost dz-btn-sm" data-edit-product="${p.id}">Modifica</button>
+            <button class="dz-btn dz-btn-ghost dz-btn-sm dz-btn-danger" data-del-product="${p.id}">Elimina</button>
+          </td>
+        </tr>`;
+    }).join('');
+
+    return `
+      <div class="dz-panel-title">
+        <h2>Catalogo prodotti</h2>
+        <button class="dz-btn dz-btn-primary" id="dz-add-product-btn">+ Aggiungi prodotto</button>
+      </div>
+      ${state.addingProduct ? `
+        <div class="dz-card">
+          <div class="dz-form-row">
+            <div class="dz-field"><label>Nome prodotto</label><input id="np-name" placeholder="Es. Whisky Riserva 18 Anni"></div>
+            <div class="dz-field"><label>Categoria</label>
+              <select id="np-category">
+                <option value="Whisky">Whisky</option><option value="Rum">Rum</option>
+                <option value="Gin">Gin</option><option value="Vodka">Vodka</option>
+                <option value="Amari">Amari</option><option value="Grappe">Grappe</option>
+                <option value="Vermouth">Vermouth</option><option value="Liquori">Liquori</option>
+              </select>
+            </div>
+          </div>
+          <div class="dz-form-row">
+            <div class="dz-field"><label>Formato</label><input id="np-unit" placeholder="Es. bottiglia 0,70L"></div>
+            <div class="dz-field"><label>Prezzo listino (€)</label><input id="np-price" type="number" step="0.01" placeholder="0.00"></div>
+          </div>
+          <div class="dz-form-row" style="justify-content:flex-end; margin-bottom:0;">
+            <button class="dz-btn dz-btn-ghost" id="np-cancel">Annulla</button>
+            <button class="dz-btn dz-btn-primary" id="np-save">Salva prodotto</button>
+          </div>
+        </div>
+      ` : ''}
+      ${state.products.length ? `<table class="dz-table"><thead><tr><th>Prodotto</th><th>Categoria</th><th>Formato</th><th>Prezzo</th><th></th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="dz-empty"><p>Nessun prodotto. Aggiungi il primo per iniziare.</p></div>`}
+    `;
+  }
+
+  function renderRepsAdmin() {
+    const rows = state.reps.map(r => {
+      if (state.editingRepId === r.id) return `
+        <tr>
+          <td><input value="${r.name}" id="er-name-${r.id}"></td>
+          <td><input type="number" step="1" value="${r.discount}" id="er-discount-${r.id}" style="max-width:80px;"></td>
+          <td>
+            <button class="dz-btn dz-btn-primary dz-btn-sm" data-save-rep="${r.id}">Salva</button>
+            <button class="dz-btn dz-btn-ghost dz-btn-sm" data-cancel-edit-rep="${r.id}">Annulla</button>
+          </td>
+        </tr>`;
+      return `
+        <tr>
+          <td>${r.name}</td>
+          <td><span class="dz-tag">${r.discount}% sconto</span></td>
+          <td>
+            <button class="dz-btn dz-btn-ghost dz-btn-sm" data-edit-rep="${r.id}">Modifica</button>
+            <button class="dz-btn dz-btn-ghost dz-btn-sm dz-btn-danger" data-del-rep="${r.id}">Elimina</button>
+          </td>
+        </tr>`;
+    }).join('');
+
+    return `
+      <div class="dz-panel-title">
+        <h2>Rappresentanti e scontistiche</h2>
+        <button class="dz-btn dz-btn-primary" id="dz-add-rep-btn">+ Aggiungi rappresentante</button>
+      </div>
+      ${state.addingRep ? `
+        <div class="dz-card">
+          <div class="dz-form-row">
+            <div class="dz-field"><label>Nome rappresentante</label><input id="nr-name" placeholder="Nome e cognome"></div>
+            <div class="dz-field"><label>Sconto assegnato (%)</label><input id="nr-discount" type="number" step="1" placeholder="Es. 15"></div>
+          </div>
+          <div class="dz-form-row" style="justify-content:flex-end; margin-bottom:0;">
+            <button class="dz-btn dz-btn-ghost" id="nr-cancel">Annulla</button>
+            <button class="dz-btn dz-btn-primary" id="nr-save">Salva rappresentante</button>
+          </div>
+        </div>
+      ` : ''}
+      ${state.reps.length ? `<table class="dz-table"><thead><tr><th>Rappresentante</th><th>Scontistica</th><th></th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="dz-empty"><p>Nessun rappresentante. Aggiungi il primo.</p></div>`}
+    `;
+  }
+
+  function renderRappresentante() {
+    if (!state.reps.length) return `<div class="dz-empty"><p>Nessun rappresentante configurato.</p></div>`;
+    const rep = state.reps.find(r => r.id === state.selectedRepId) || state.reps[0];
+    const items = state.products.map(p => {
+      const finalPrice = p.base_price * (1 - rep.discount / 100);
+      const qty = state.quote[p.id] || 0;
+      return `
+        <tr>
+          <td>${p.name}<div style="color:#A99C86; font-size:12px;">${p.unit}</div></td>
+          <td><span class="dz-tag">${p.category}</span></td>
+          <td style="color:#A99C86;"><s>${fmt(p.base_price)}</s></td>
+          <td class="dz-price">${fmt(finalPrice)}</td>
+          <td><input type="number" min="0" class="dz-qty-input" value="${qty}" data-qty="${p.id}"></td>
+        </tr>`;
+    }).join('');
+
+    const totalBottles = Object.values(state.quote).reduce((a, b) => a + (Number(b) || 0), 0);
+    const totalAmount = state.products.reduce((sum, p) => {
+      const q = Number(state.quote[p.id]) || 0;
+      return sum + q * p.base_price * (1 - rep.discount / 100);
+    }, 0);
+
+    return `
+      <div class="dz-rep-select">
+        <div class="dz-field" style="min-width:220px;">
+          <label>Rappresentante</label>
+          <select id="dz-rep-picker">
+            ${state.reps.map(r => `<option value="${r.id}" ${r.id === rep.id ? 'selected' : ''}>${r.name}</option>`).join('')}
+          </select>
+        </div>
+        <span class="dz-tag" style="margin-top:24px;">Sconto: ${rep.discount}%</span>
+      </div>
+
+      <div class="dz-panel-title">
+        <h2>Listino personalizzato</h2>
+      </div>
+
+      ${state.products.length ? `<table class="dz-table"><thead><tr><th>Prodotto</th><th>Categoria</th><th>Listino</th><th>Netto</th><th>Quantità</th></tr></thead><tbody>${items}</tbody></table>` : `<div class="dz-empty"><p>Nessun prodotto disponibile.</p></div>`}
+
+      <div class="dz-quote-bar">
+        <div class="dz-field" style="max-width:260px;">
+          <label>Cliente (facoltativo)</label>
+          <input id="dz-quote-client" placeholder="Nome cliente / locale" value="${state.quoteClient}">
+        </div>
+        <div class="dz-quote-total">
+          ${fmt(totalAmount)}
+          <span>${totalBottles} pezzi — preventivo</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function attachLoginEvents() {
+    let selectedRole = 'direzione';
+    document.querySelectorAll('.dz-login-tab').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.dz-login-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRole = btn.dataset.loginRole;
+      };
+    });
+    document.getElementById('dz-login-submit').onclick = () => {
+      const pwd = document.getElementById('dz-password-input').value;
+      handleLogin(pwd, selectedRole);
+    };
+  }
+
+  function attachAppEvents() {
+    document.getElementById('dz-logout').onclick = handleLogout;
+
+    if (state.role === 'direzione') {
+      document.querySelectorAll('[data-dtab]').forEach(btn => {
+        btn.onclick = () => { state.direzioneTab = btn.dataset.dtab; state.addingProduct = false; state.addingRep = false; render(); };
+      });
+
+      const addProductBtn = document.getElementById('dz-add-product-btn');
+      if (addProductBtn) addProductBtn.onclick = () => { state.addingProduct = true; render(); };
+      const npCancel = document.getElementById('np-cancel');
+      if (npCancel) npCancel.onclick = () => { state.addingProduct = false; render(); };
+      const npSave = document.getElementById('np-save');
+      if (npSave) npSave.onclick = () => {
+        const name = document.getElementById('np-name').value.trim();
+        const category = document.getElementById('np-category').value;
+        const unit = document.getElementById('np-unit').value.trim() || 'bottiglia 0,70L';
+        const price = parseFloat(document.getElementById('np-price').value);
+        if (!name || isNaN(price)) { showError('Inserisci nome e prezzo validi.'); return; }
+        saveProduct({ name, category, unit, base_price: price });
+      };
+
+      document.querySelectorAll('[data-edit-product]').forEach(btn => {
+        btn.onclick = () => { state.editingProductId = btn.dataset.editProduct; render(); };
+      });
+      document.querySelectorAll('[data-cancel-edit-product]').forEach(btn => {
+        btn.onclick = () => { state.editingProductId = null; render(); };
+      });
+      document.querySelectorAll('[data-save-product]').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.saveProduct;
+          const p = state.products.find(x => x.id === id);
+          p.name = document.getElementById(`ep-name-${id}`).value.trim() || p.name;
+          p.category = document.getElementById(`ep-category-${id}`).value;
+          p.unit = document.getElementById(`ep-unit-${id}`).value.trim() || p.unit;
+          const price = parseFloat(document.getElementById(`ep-price-${id}`).value);
+          if (!isNaN(price)) p.base_price = price;
+          saveProduct(p);
+        };
+      });
+      document.querySelectorAll('[data-del-product]').forEach(btn => {
+        btn.onclick = () => deleteProduct(btn.dataset.delProduct);
+      });
+
+      const addRepBtn = document.getElementById('dz-add-rep-btn');
+      if (addRepBtn) addRepBtn.onclick = () => { state.addingRep = true; render(); };
+      const nrCancel = document.getElementById('nr-cancel');
+      if (nrCancel) nrCancel.onclick = () => { state.addingRep = false; render(); };
+      const nrSave = document.getElementById('nr-save');
+      if (nrSave) nrSave.onclick = () => {
+        const name = document.getElementById('nr-name').value.trim();
+        const discount = parseFloat(document.getElementById('nr-discount').value);
+        if (!name || isNaN(discount)) { showError('Inserisci nome e sconto validi.'); return; }
+        saveRep({ name, discount });
+      };
+
+      document.querySelectorAll('[data-edit-rep]').forEach(btn => {
+        btn.onclick = () => { state.editingRepId = btn.dataset.editRep; render(); };
+      });
+      document.querySelectorAll('[data-cancel-edit-rep]').forEach(btn => {
+        btn.onclick = () => { state.editingRepId = null; render(); };
+      });
+      document.querySelectorAll('[data-save-rep]').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.saveRep;
+          const r = state.reps.find(x => x.id === id);
+          r.name = document.getElementById(`er-name-${id}`).value.trim() || r.name;
+          const discount = parseFloat(document.getElementById(`er-discount-${id}`).value);
+          if (!isNaN(discount)) r.discount = discount;
+          saveRep(r);
+        };
+      });
+      document.querySelectorAll('[data-del-rep]').forEach(btn => {
+        btn.onclick = () => deleteRep(btn.dataset.delRep);
+      });
+    } else {
+      const repPicker = document.getElementById('dz-rep-picker');
+      if (repPicker) repPicker.onchange = () => { state.selectedRepId = repPicker.value; render(); };
+      document.querySelectorAll('[data-qty]').forEach(input => {
+        input.oninput = () => {
+          state.quote[input.dataset.qty] = Math.max(0, parseInt(input.value) || 0);
+        };
+      });
+      const quoteClientInput = document.getElementById('dz-quote-client');
+      if (quoteClientInput) quoteClientInput.oninput = () => { state.quoteClient = quoteClientInput.value; };
+    }
+  }
+
+  // Register service worker per PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  render();
+</script>
+
+</body>
+</html>
